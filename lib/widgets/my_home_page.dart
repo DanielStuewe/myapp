@@ -18,17 +18,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Todo> _todos = [
-    Todo(
-        name: 'test',
-        description: 'Ist es ein Raum? Ist es ein Berg?',
-        state: TodoState.NotStarted),
-    Todo(
-        name: 'Hallo',
-        description: 'Ist es ein Raum? Ist es ein Berg?',
-        state: TodoState.NotStarted,
-        deadline: TemporalDateTime.fromString('2024-06-22T17:00Z'))
-  ];
+  List<Todo> _todos = [];
 
   void _incrementCounter() {
     setState(() {
@@ -39,6 +29,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ));
     });
   }
+
+  Future<void> deleteTodo(Todo todoToDelete) async {
+  final request = ModelMutations.delete(todoToDelete);
+  final response = await Amplify.API.mutate(request: request).response;
+  safePrint('Response: $response');
+}
 
   @override
   void initState() {

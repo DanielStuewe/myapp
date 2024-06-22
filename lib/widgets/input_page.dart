@@ -1,7 +1,9 @@
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
-import 'package:myapp/models/Todo.dart'; // Import your Todo model
+import 'package:myapp/models/Todo.dart';
+import 'package:myapp/widgets/my_home_page.dart'; // Import your Todo model
  
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
@@ -27,14 +29,43 @@ class _InputPageState extends State<InputPage> {
       );
  
       // Do something with the newTodo, like adding it to a list or sending it to a server
-      print('New Todo created: ${newTodo.name}, ${newTodo.description}, ${newTodo.deadline}, ${newTodo.state}');
+      createTodo(newTodo);
       // Clear the form
-      _formKey.currentState!.reset();
+      
       setState(() {
+        _formKey.currentState!.reset();
         _deadline = null;
       });
+      _navigateAndDisplaySelection(context);
+
     }
   }
+
+  Future<void> _navigateAndDisplaySelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      // Create the SelectionScreen in the next step.
+      MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Hackathon Todo App')),
+    );
+  }
+
+  Future<void> createTodo(Todo todo) async {
+  try {
+    final request = ModelMutations.create(todo);
+    final response = await Amplify.API.mutate(request: request).response;
+
+    final createdTodo = response.data;
+    if (createdTodo == null) {
+      safePrint('errors: ${response.errors}');
+      return;
+    }
+    safePrint('Mutation result: ${createdTodo.name}');
+  } on ApiException catch (e) {
+    safePrint('Mutation failed: $e');
+  }
+}
  
   @override
   void dispose() {
@@ -48,6 +79,7 @@ class _InputPageState extends State<InputPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Create a Todo'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
         child: Padding(
@@ -57,62 +89,64 @@ class _InputPageState extends State<InputPage> {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // Name Field (Mandatory)
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Name',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a name';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16.0),
-                  // Description Field (Optional)
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: InputDecoration(
-                      labelText: 'Description (Optional)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  SizedBox(height: 16.0),
-                  // Deadline Field (Optional)
-                  GestureDetector(
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2101),
-                      );
-                      if (pickedDate != null) {
-                        setState(() {
-                          _deadline = pickedDate;
-                        });
-                      }
-                    },
-                    child: AbsorbPointer(
-                      child: TextFormField(
+                    children: <Widget>[
+                      // Name Field (Mandatory)
+                      TextFormField(
+                        controller: _nameController,
                         decoration: InputDecoration(
-                          labelText: _deadline == null
-                              ? 'Select Deadline (Optional)'
-                              : 'Deadline: ${DateFormat('yyyy-MM-dd').format(_deadline!)}',
+                          labelText: 'Name',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a name';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16.0),
+                      // Description Field (Optional)
+                      TextFormField(
+                        controller: _descriptionController,
+                        decoration: InputDecoration(
+                          labelText: 'Description (Optional)',
                           border: OutlineInputBorder(),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 16.0),
-                  // Submit Button
-                  ElevatedButton(
-                    onPressed: _submitForm,
-                    child: Text('Submit'),
+                      SizedBox(height: 16.0),
+                      // Deadline Field (Optional)
+                      GestureDetector(
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2101),
+                          );
+                          if (pickedDate != null) {
+                            setState(() {
+                              _deadline = pickedDate;
+                            });
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              labelText: _deadline == null
+                                  ? 'Select Deadline (Optional)'
+                                  : 'Deadline: ${DateFormat('yyyy-MM-dd').format(_deadline!)}',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+                      // Submit Button
+                      OutlinedButton(
+                        onPressed: _submitForm,
+                        child: Text('Submit'),
+                      ),
+                    ],
                   ),
                 ],
               ),
