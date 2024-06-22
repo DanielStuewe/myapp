@@ -1,4 +1,6 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'models/Todo.dart';
 
 class TodoPage extends StatelessWidget {
@@ -13,6 +15,7 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    safePrint('TodoPage TODO ${todo}');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -24,10 +27,20 @@ class TodoPage extends StatelessWidget {
             Text('Name: ${todo.name}'),
             Text('Description: ${truncate(todo.description ?? '')}'),
             Text('Status: ${todo.state}'),
-            Text('Deadline: ${todo.deadline?.format() ?? 'No Deadline'}')
+            Text('Deadline: ${formatDeadline(todo.deadline)}')
           ],
         ),
       ),
     );
+  }
+
+  String formatDeadline(TemporalDateTime? deadline) {
+    safePrint('TodoPage deadline ${deadline}');
+    if (deadline == null) {
+      return 'No Deadline';
+    }
+
+    final DateFormat formatter = DateFormat('yyyy-MM-dd', 'de_DE');
+    return formatter.format(deadline.getDateTimeInUtc()) ;
   }
 }
