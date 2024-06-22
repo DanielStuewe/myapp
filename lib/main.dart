@@ -1,11 +1,11 @@
 import 'package:amplify_api/amplify_api.dart';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:myapp/widgets/my_home_page.dart';
 
 import 'amplifyconfiguration.dart';
+import 'models/ModelProvider.dart';
 
 void main() {
   _configureAmplify();
@@ -17,10 +17,9 @@ Future<void> _configureAmplify() async {
   try {
     await Amplify.addPlugins(
       [
-        AmplifyAuthCognito(),
         AmplifyAPI(
           options: APIPluginOptions(
-            //modelProvider: ModelProvider.instance,
+            modelProvider: ModelProvider.instance,
           ),
         ),
       ],
@@ -40,10 +39,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Todo App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Kraftwerk Räume'),
+      home: const MyHomePage(title: 'Hackathon Todo App'),
     );
   }
 }
