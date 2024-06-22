@@ -6,6 +6,11 @@ class TodoPage extends StatelessWidget {
 
   const TodoPage({super.key, required this.todo});
 
+  String truncate(String text, [int limit = 100, String omission = '...']) =>
+      (text.length >= limit)
+          ? text.replaceRange(limit, text.length, omission)
+          : text;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +22,9 @@ class TodoPage extends StatelessWidget {
         child: Column(
           children: [
             Text('Name: ${todo.name}'),
-            Text('Description: ${todo.description}'),
+            Text('Description: ${truncate(todo.description ?? '')}'),
             Text('Status: ${todo.state}'),
-            Text('Deadline: ${todo.deadline?.format()??'No Deadline'}')
+            Text('Deadline: ${todo.deadline?.format() ?? 'No Deadline'}')
           ],
         ),
       ),
