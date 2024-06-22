@@ -45,6 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
           children: todos.map((todo) {
             return ListTile(
               title: Text(todo.name),
+              leading: const Icon(Icons.check_box),
+              trailing: const Icon(Icons.delete),
+              subtitle: Text(todo.description?.substring(0, todo.description.length < 100 ? todo.description.length : 100)),
+          
+
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -62,4 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+  
 }
