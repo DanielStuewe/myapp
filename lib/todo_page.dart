@@ -3,19 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'models/Todo.dart';
 
+
+String truncate(String text, [int limit = 100, String omission = '...']) =>
+    (text.length >= limit)
+        ? text.replaceRange(limit, text.length, omission)
+        : text;
+
+String formatDeadline(TemporalDateTime? deadline) {
+  safePrint('TodoPage deadline $deadline');
+  if (deadline == null) {
+    return 'No Deadline';
+  }
+
+  final DateFormat formatter = DateFormat('yMMMMEEEEd', 'de_DE');
+  return formatter.format(deadline.getDateTimeInUtc()) ;
+}
+
 class TodoPage extends StatelessWidget {
   final Todo todo;
 
   const TodoPage({super.key, required this.todo});
 
-  String truncate(String text, [int limit = 100, String omission = '...']) =>
-      (text.length >= limit)
-          ? text.replaceRange(limit, text.length, omission)
-          : text;
-
   @override
   Widget build(BuildContext context) {
-    safePrint('TodoPage TODO ${todo}');
+    safePrint('TodoPage TODO $todo');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -32,15 +43,5 @@ class TodoPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String formatDeadline(TemporalDateTime? deadline) {
-    safePrint('TodoPage deadline ${deadline}');
-    if (deadline == null) {
-      return 'No Deadline';
-    }
-
-    final DateFormat formatter = DateFormat('yyyy-MM-dd', 'de_DE');
-    return formatter.format(deadline.getDateTimeInUtc()) ;
   }
 }
