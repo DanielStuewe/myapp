@@ -88,7 +88,7 @@ class Todo extends amplify_core.Model {
       name: name,
       description: description,
       deadline: deadline,
-      state: state);
+      state: TodoState.NotStarted);
   }
   
   bool equals(Object other) {

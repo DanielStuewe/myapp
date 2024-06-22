@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/models/ModelProvider.dart';
 import 'package:myapp/todo_page.dart';
 import 'package:myapp/widgets/TodoTile.dart';
+import 'package:myapp/widgets/input_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -33,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _todos.add(Todo(
         name: 'New task',
-        description: 'Beschreibung des neuen Raums',
+        description: 'Beschreibung des neuen Tasks',
         state: TodoState.NotStarted,
       ));
     });
@@ -84,8 +85,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Add room',
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                InputPage(key: UniqueKey()))), //_incrementCounter,
+        tooltip: 'Add To Do',
         child: const Icon(Icons.add),
       ),
     );
