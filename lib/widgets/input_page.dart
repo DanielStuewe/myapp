@@ -91,51 +91,60 @@ class _InputPageState extends State<InputPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       // Name Field (Mandatory)
-                      TextFormField(
-                        controller: _nameController,
-                        decoration: InputDecoration(
-                          labelText: 'Name',
-                          border: OutlineInputBorder(),
+                      Container(
+                        width: 250,
+                        child: TextFormField(
+                          controller: _nameController,
+                          decoration: InputDecoration(
+                            labelText: 'Name',
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a name';
+                            }
+                            return null;
+                          },
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a name';
-                          }
-                          return null;
-                        },
                       ),
                       SizedBox(height: 16.0),
                       // Description Field (Optional)
-                      TextFormField(
-                        controller: _descriptionController,
-                        decoration: InputDecoration(
-                          labelText: 'Description (Optional)',
-                          border: OutlineInputBorder(),
+                      Container(
+                        width: 250,
+                        child: TextFormField(
+                          controller: _descriptionController,
+                          decoration: InputDecoration(
+                            labelText: 'Description (Optional)',
+                            border: OutlineInputBorder(),
+                          ),
                         ),
                       ),
                       SizedBox(height: 16.0),
                       // Deadline Field (Optional)
-                      GestureDetector(
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2101),
-                          );
-                          if (pickedDate != null) {
-                            setState(() {
-                              _deadline = pickedDate;
-                            });
-                          }
-                        },
-                        child: AbsorbPointer(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: _deadline == null
-                                  ? 'Select Deadline (Optional)'
-                                  : 'Deadline: ${DateFormat('yyyy-MM-dd').format(_deadline!)}',
-                              border: OutlineInputBorder(),
+                      Container(
+                        width: 250,
+                        child: GestureDetector(
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
+                            );
+                            if (pickedDate != null) {
+                              setState(() {
+                                _deadline = pickedDate;
+                              });
+                            }
+                          },
+                          child: AbsorbPointer(
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                labelText: _deadline == null
+                                    ? 'Select Deadline (Optional)'
+                                    : 'Deadline: ${DateFormat('yyyy-MM-dd').format(_deadline!)}',
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           ),
                         ),
@@ -148,12 +157,10 @@ class _InputPageState extends State<InputPage> {
                       ),
                     ],
                   ),
-                ],
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
