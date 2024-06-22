@@ -5,6 +5,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/models/ModelProvider.dart';
 import 'package:myapp/todo_page.dart';
+import 'package:myapp/widgets/TodoTile.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -73,35 +74,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: ListView(
           children: _todos.map((todo) {
-            final leadingIcon = switch (todo.state) {
-              TodoState.InProgress => Icon(Icons.change_circle),
-              TodoState.NotStarted => Icon(Icons.circle_outlined),
-              _ => Icon(Icons.check_circle_outline)
-            };
-            const Icon(Icons.check_box);
-            return ListTile(
-              title: Text(todo.name),
-              leading: IconButton(
-                icon: leadingIcon,
-                onPressed: () => {
-                  setState(() {
-                    _todos.add(todo.copyWith(state: TodoState.InProgress));
-                  })
-                },
-              ),
-              trailing: IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => {},
-              ),
-              subtitle: todo.description != null
-                  ? Text(truncate(todo.description!))
-                  : null,
-              // onTap: () => Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) =>
-              //           TodoPage(key: ValueKey(todo.hashCode), todo: todo)),
-              // ),
+            return TodoTile(
+              todo: todo,
+              onPressed: () => setState(() {
+                _todos.add(todo.copyWith(state: TodoState.InProgress));
+              }),
             );
           }).toList(),
         ),
