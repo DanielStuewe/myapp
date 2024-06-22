@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return;
       }
       setState(() {
-        //_todos = todos!.whereType<Todo>().toList();
+        _todos = todos!.whereType<Todo>().toList();
         safePrint(_todos);
       });
     } on ApiException catch (e) {
