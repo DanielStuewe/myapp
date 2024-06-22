@@ -59,11 +59,16 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Room> rooms = [Room(name: 'Wendelstein', description: 'Ist es ein Raum? Ist es ein Berg?', numberOfSeats: 6)];
+  List<Room> rooms = [Room(name: 'Wendelstein', description: 'Ist es ein Raum? Ist es ein Berg?', numberOfSeats: 6),
+  Room(name: 'Hallo', description: 'Ist es ein Raum? Ist es ein Berg?', numberOfSeats: 6) ];
 
   void _incrementCounter() {
-    setState(() {
-      // rooms.add('value');
+   setState(() {
+      rooms.add(Room(
+        name: 'Neuer Raum',
+        description: 'Beschreibung des neuen Raums',
+        numberOfSeats: 10,
+      ));
     });
   }
 

@@ -5,13 +5,15 @@ The section below creates a Todo database table with a "content" field. Try
 adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any unauthenticated user can "create", "read", "update", 
 and "delete" any "Todo" records.
-=========================================================================*/
+=
+========================================================================*/
 const schema = a.schema({
-  Room: a
+  Todo: a
     .model({
-      name: a.string(),
+      name: a.string().required(),
       description: a.string(),
-      numberOfSeats: a.integer(),
+      deadline: a.datetime(),
+      state: a.enum(["Done", "InProgress", "NotStarted"])
     })
     .authorization(allow => [allow.publicApiKey()])
 });
